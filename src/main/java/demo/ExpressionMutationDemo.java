@@ -22,10 +22,8 @@ public class ExpressionMutationDemo {
 		Expression parent = pool.random();
 		
 		for(int i = 0; i < 100; i++) {
-			
 			System.out.println(parent);
 			parent = parent.mutate();
 		}
-		
 	}
 }

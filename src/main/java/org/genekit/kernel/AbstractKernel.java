@@ -7,22 +7,22 @@ import org.genekit.FitnessFunction;
 import org.genekit.GenePool;
 import org.genekit.Individual;
 
-public class BasicKernel<T extends Chromosome<T>> {
+public abstract class AbstractKernel<T extends Chromosome<T>> {
 	
-	private final int size;
-	private final GenePool<T> builder;
-	private final FitnessFunction<T> function;
-	private final Random random = new Random();
+	protected final double DEFAULT_MUTATE_PROBABILITY = 0.25;
 	
-	public BasicKernel(int size, GenePool<T> builder, FitnessFunction<T> function) {
+	protected final int size;
+	protected final GenePool<T> pool;
+	protected final FitnessFunction<T> function;
+	protected final Random random = new Random();
+	
+	public AbstractKernel(int size, GenePool<T> pool, FitnessFunction<T> function) {
 		this.size = size;
-		this.builder = builder;
+		this.pool = pool;
 		this.function = function;
 	}
 	
-	protected void output(Generation<T> generation) {
-		System.out.println(generation.getIndex() + ": " + function.print(generation.getBest().getChromosome()));
-	}
+	protected abstract void output(Generation<T> generation);
 	
 	protected Individual<T> select(List<Individual<T>> current) {
 		
@@ -42,7 +42,7 @@ public class BasicKernel<T extends Chromosome<T>> {
 	}
 	
 	public List<Generation<T>> run(TerminateCondition<T> indicator) {
-		return run(indicator, 0.25);
+		return run(indicator, DEFAULT_MUTATE_PROBABILITY);
 	}
 	
 	public List<Generation<T>> run(TerminateCondition<T> indicator, double mutateProb) {
@@ -53,7 +53,7 @@ public class BasicKernel<T extends Chromosome<T>> {
 		int generationIndex = 0;
 		
 		for(int i = 0; i < size; i++) {
-			T c = builder.random();
+			T c = pool.random();
 			current.add(new Individual<T>(c, function.getStandardizedFitness(c)));
 		}
 		

@@ -14,16 +14,23 @@ public class ExpressionPool implements GenePool<Expression>{
 	private final int max;
 	private int maxDepth;
 	
+	private final boolean usePrimitives;
+	
 	public ExpressionPool(int min, int max, int maxDepth) {
+		this(min, max, maxDepth, true);
+	}
+	
+	public ExpressionPool(int min, int max, int maxDepth, boolean usePrimitives) {
 		this.min = min;
 		this.max = max;
 		this.maxDepth = maxDepth;
+		this.usePrimitives = usePrimitives;
 	}
 	
 	public ExpressionPool addFunction(Function function) {
 		
 		if(allFunctions.contains(function)) {
-			throw new IllegalArgumentException(""); //TODO: Fix Error Message
+			throw new IllegalArgumentException("Function Already Exists"); 
 		}
 		
 		allFunctions.add(function);
@@ -34,6 +41,11 @@ public class ExpressionPool implements GenePool<Expression>{
 	}
 	
 	private Function getFromList(List<Function> list) {
+		
+		if(!usePrimitives) {
+			return list.get(random.nextInt(list.size()));
+		}
+		
 		int index = (list.size() > 0) ? random.nextInt(list.size() + 1) : 0;
 		if(index >= list.size()) {
 			return new PrimitiveFunction(min + (random.nextDouble() * (max - min)));

@@ -5,7 +5,8 @@ import org.genekit.impl.ga.SolutionFitnessFunction;
 import org.genekit.impl.ga.Solution;
 import org.genekit.impl.ga.SolutionPool;
 import org.genekit.kernel.BasicCondition;
-import org.genekit.kernel.BasicKernel;
+import org.genekit.kernel.AbstractKernel;
+import org.genekit.kernel.Generation;
 
 public class SolutionKernelDemo {
 	
@@ -23,12 +24,7 @@ public class SolutionKernelDemo {
 		
 		SolutionPool pool = new SolutionPool(NUM_PARAMS, MIN, MAX);
 		
-		SolutionFitnessFunction fitness = new SolutionFitnessFunction() {
-			@Override
-			public String print(Solution c) {
-				return c + " = " + left(c);
-			}
-			
+		final SolutionFitnessFunction fitness = new SolutionFitnessFunction() {
 			@Override
 			public double right(Solution s) {
 				return Math.PI;
@@ -46,7 +42,13 @@ public class SolutionKernelDemo {
 			}
 		};
 		
-		BasicKernel<Solution> kernel = new BasicKernel<Solution>(POPULATION_SIZE, pool, fitness);
+		AbstractKernel<Solution> kernel = new AbstractKernel<Solution>(POPULATION_SIZE, pool, fitness) {
+			@Override
+			protected void output(Generation<Solution> generation) {
+				Solution s = generation.getBest().getChromosome();
+				System.out.println(s + " = " + fitness.left(s));
+			}
+		};
 		
 		if(USE_ACCURACY) {
 			kernel.run(new AccuracyCondition(PRECISION, fitness));

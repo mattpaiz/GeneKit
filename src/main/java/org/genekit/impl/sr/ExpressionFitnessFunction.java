@@ -5,11 +5,6 @@ import org.genekit.FitnessFunction;
 public abstract class ExpressionFitnessFunction implements FitnessFunction<Expression> {
 
 	@Override
-	public String print(Expression e) {
-		return getStandardizedFitness(e) + " : " + e.getPrettyOutput();
-	}
-
-	@Override
 	public abstract double getError(Expression e);
 
 	@Override

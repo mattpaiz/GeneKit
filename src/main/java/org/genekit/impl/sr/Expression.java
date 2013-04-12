@@ -73,7 +73,6 @@ public class Expression implements Chromosome<Expression> {
 		return root;
 	}
 	
-	//TODO: Make Commutative and Associative Interface
 	private String getPrettyOutput(TreeNode node, Function parent) {
 		String output = null;
 		
@@ -105,9 +104,9 @@ public class Expression implements Chromosome<Expression> {
 		String output = getPrettyOutput(root, null);
 		if(output.startsWith("(")) {
 			output = output.substring(1);
-			if(output.endsWith(")")) {
-				output = output.substring(0, output.length() - 1);
-			}
+		}
+		if(output.endsWith(")")) {
+			output = output.substring(0, output.length() - 1);
 		}
 		return output;
 	}
